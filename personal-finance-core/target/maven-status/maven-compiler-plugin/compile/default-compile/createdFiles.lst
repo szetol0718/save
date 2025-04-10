@@ -11,7 +11,6 @@ com/example/finance/model/User.class
 com/example/finance/repository/TransactionRepository.class
 com/example/finance/service/TransactionServiceImpl.class
 com/example/finance/config/SecurityConfig.class
-com/example/finance/controller/TransactionController.class
 com/example/finance/service/CategoryService.class
 com/example/finance/repository/UserRepository.class
 com/example/finance/controller/CategoryController.class

@@ -17,6 +17,6 @@ public interface TransactionService {
 
     List<Transaction> filterTransactions(String category, LocalDate startDate, LocalDate endDate);
 
-    Summary calculateSummary(List<Transaction> transactions);  // ✅ NEW METHOD
+    Summary calculateSummary(List<Transaction> transactions);
 }
 
