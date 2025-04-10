@@ -14,11 +14,6 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
@@ -26,8 +21,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute User user) {
-        userService.register(user);
-        return "redirect:/login?registered";
+    public String registerUser(@ModelAttribute("user") User user) {
+        userService.save(user);
+        return "redirect:/login";
+    }
+
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "login";
     }
 }

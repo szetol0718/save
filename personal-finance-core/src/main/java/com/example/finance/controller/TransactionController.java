@@ -2,11 +2,17 @@
 package com.example.finance.controller;
 
 import com.example.finance.model.Transaction;
+import com.example.finance.model.Category;
 import com.example.finance.service.TransactionService;
+import com.example.finance.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
+import java.util.List;
+import com.example.finance.dto.Summary;
 
 @Controller
 @RequestMapping("/transactions")
@@ -15,33 +21,54 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @GetMapping
     public String listTransactions(Model model) {
-        model.addAttribute("transactions", transactionService.getAll());
+        List<Transaction> transactions = transactionService.getAllTransactions();
+        List<Category> categories = categoryService.getAllCategories();
+        Summary summary = transactionService.calculateSummary(transactions); // ← add this line
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("categories", categories);
+        model.addAttribute("summary", summary); // ← and this line
         return "transactions";
     }
+    
 
-    @GetMapping("/add")
-    public String showAddForm(Model model) {
-        model.addAttribute("transaction", new Transaction());
-        return "transaction_form";
-    }
-
-    @PostMapping("/save")
-    public String saveTransaction(@ModelAttribute Transaction transaction) {
-        transactionService.save(transaction);
+    @PostMapping("/add")
+    public String addTransaction(@ModelAttribute Transaction transaction) {
+        transactionService.saveTransaction(transaction);
         return "redirect:/transactions";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editTransaction(@PathVariable Long id, Model model) {
-        model.addAttribute("transaction", transactionService.getById(id));
-        return "transaction_form";
-    }
-
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteTransaction(@PathVariable Long id) {
-        transactionService.delete(id);
+        transactionService.deleteTransaction(id);
         return "redirect:/transactions";
     }
+
+    @PostMapping("/update")
+    public String updateTransaction(@ModelAttribute Transaction transaction) {
+        transactionService.updateTransaction(transaction);
+        return "redirect:/transactions";
+    }
+
+    @GetMapping("/filter")
+    public String filterTransactions(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            Model model
+    ) {
+        List<Transaction> transactions = transactionService.filterTransactions(category, startDate, endDate);
+        List<Category> categories = categoryService.getAllCategories();
+        Summary summary = transactionService.calculateSummary(transactions); // ← add this line
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("categories", categories);
+        model.addAttribute("summary", summary); // ← and this line
+        return "transactions";
+    }
+    
+    
 }

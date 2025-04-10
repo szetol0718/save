@@ -1,4 +1,3 @@
-
 package com.example.finance;
 
 import org.springframework.boot.SpringApplication;

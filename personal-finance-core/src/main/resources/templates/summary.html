@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Monthly Summary</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; padding: 40px; }
+        h2 { text-align: center; }
+        .summary-boxes { display: flex; justify-content: space-around; margin-bottom: 40px; }
+        .box {
+            background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 25%; text-align: center; font-size: 1.2em;
+        }
+        canvas { margin: auto; display: block; max-width: 600px; }
+    </style>
+</head>
+<body>
+    <h2>Monthly Summary</h2>
+    <div class="summary-boxes">
+        <div class="box">Income: $<span th:text="${totalIncome}">0.00</span></div>
+        <div class="box">Expenses: $<span th:text="${totalExpense}">0.00</span></div>
+        <div class="box">Balance: $<span th:text="${balance}">0.00</span></div>
+    </div>
+
+    <canvas id="categoryChart"></canvas>
+
+    <script th:inline="javascript">
+        const labels = [[${categoryLabels}]];
+        const data = [[${categoryAmounts}]];
+
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Spending by Category',
+                    data: data,
+                    backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745', '#6610f2']
+                }]
+            }
+        });
+    </script>
+</body>
+</html>

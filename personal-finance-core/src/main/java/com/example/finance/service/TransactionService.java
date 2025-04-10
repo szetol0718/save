@@ -1,31 +1,22 @@
-
 package com.example.finance.service;
 
+import com.example.finance.dto.Summary;
 import com.example.finance.model.Transaction;
-import com.example.finance.repository.TransactionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import java.time.LocalDate;
 import java.util.List;
 
-@Service
-public class TransactionService {
-    @Autowired
-    private TransactionRepository transactionRepository;
+public interface TransactionService {
 
-    public List<Transaction> getAll() {
-        return transactionRepository.findAll();
-    }
+    List<Transaction> getAllTransactions();
 
-    public Transaction getById(Long id) {
-        return transactionRepository.findById(id).orElse(null);
-    }
+    void saveTransaction(Transaction transaction);
 
-    public Transaction save(Transaction transaction) {
-        return transactionRepository.save(transaction);
-    }
+    void deleteTransaction(Long id);
 
-    public void delete(Long id) {
-        transactionRepository.deleteById(id);
-    }
+    void updateTransaction(Transaction transaction);
+
+    List<Transaction> filterTransactions(String category, LocalDate startDate, LocalDate endDate);
+
+    Summary calculateSummary(List<Transaction> transactions);  // ✅ NEW METHOD
 }
+
