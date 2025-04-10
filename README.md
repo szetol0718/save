@@ -54,9 +54,6 @@ Then go to `http://localhost:8080`.
 - `service/`: Business logic
 - `templates/`: Thymeleaf views
 
-## 📜 License
-This project is open source and available under the [MIT License](LICENSE).
-
 ---
 
 **Author:** [szetol0718](https://github.com/szetol0718)
