@@ -1,1 +1,0 @@
-// Transaction entity placeholder
